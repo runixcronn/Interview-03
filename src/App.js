@@ -8,34 +8,24 @@ function App() {
 const GenerateList = () => {
   const [items, setItems] = useState([]);
 
-  useEffect(() => {
-    const handleGenerateActivity = async () => {
-      try {
-        const response = await axios.get(
-          "https://jsonplaceholder.typicode.com/todos"
-        );
-        const randomIndex = Math.floor(Math.random() * response.data.length);
-        setItems((prevItems) => [...prevItems, response.data[randomIndex]]);
-      } catch (error) {
-        console.error("Veri çekme hatası:", error);
-      }
-    };
-
-    const generateButton = document.querySelector(".generate-btn");
-    if (generateButton) {
-      generateButton.addEventListener("click", handleGenerateActivity);
+  const handleGenerateActivity = async () => {
+    try {
+      const response = await axios.get(
+        "https://jsonplaceholder.typicode.com/todos"
+      );
+      const randomIndex = Math.floor(Math.random() * response.data.length);
+      setItems((prevItems) => [...prevItems, response.data[randomIndex]]);
+    } catch (error) {
+      console.error("Veri çekme hatası:", error);
     }
-
-    return () => {
-      if (generateButton) {
-        generateButton.removeEventListener("click", handleGenerateActivity);
-      }
-    };
-  }, []);
+  };
 
   return (
     <div className="p-4">
-      <button className="generate-btn bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-md mb-4">
+      <button
+        onClick={handleGenerateActivity}
+        className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-md mb-4"
+      >
         Generate Activity
       </button>
       {items.map((item, index) => (
