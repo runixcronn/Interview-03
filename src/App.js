@@ -1,5 +1,6 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
+
 function App() {
   return <GenerateList />;
 }
@@ -13,7 +14,6 @@ const GenerateList = () => {
         const response = await axios.get(
           "https://jsonplaceholder.typicode.com/todos"
         );
-        // Rastgele bir todo seçelim
         const randomIndex = Math.floor(Math.random() * response.data.length);
         setItems((prevItems) => [...prevItems, response.data[randomIndex]]);
       } catch (error) {
@@ -34,15 +34,8 @@ const GenerateList = () => {
   }, []);
 
   return (
-    <div className="list-container">
-      <button
-        className="generate-btn"
-        style={{
-          padding: "8px 16px",
-          margin: "10px",
-          borderRadius: "4px",
-        }}
-      >
+    <div className="p-4">
+      <button className="generate-btn bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-md mb-4">
         Generate Activity
       </button>
       {items.map((item, index) => (
@@ -56,40 +49,37 @@ const ExpandableListItem = ({ item }) => {
   const [isExpanded, setIsExpanded] = useState(false);
 
   return (
-    <div
-      style={{
-        border: "1px solid #ddd",
-        margin: "10px",
-        padding: "10px",
-        borderRadius: "4px",
-      }}
-    >
+    <div className="border border-gray-200 rounded-lg p-4 mb-4 shadow-sm">
       <div
         onClick={() => setIsExpanded(!isExpanded)}
-        style={{
-          cursor: "pointer",
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-        }}
+        className="flex justify-between items-center cursor-pointer"
       >
-        <h3>{item.title}</h3>
-        <button
-          style={{
-            padding: "4px 12px",
-            borderRadius: "4px",
-          }}
-        >
-          {isExpanded ? "Collapse" : "Expand"}
+        <h3 className="text-lg font-semibold">{item.title}</h3>
+        <button className="bg-gray-100 hover:bg-gray-200 px-3 py-1 rounded-md text-sm transition-transform duration-300">
+          <span
+            className={`inline-block transform ${
+              isExpanded ? "rotate-180" : ""
+            }`}
+          >
+            ▼
+          </span>
         </button>
       </div>
-      {isExpanded && (
-        <div style={{ marginTop: "10px" }}>
-          <p>userId: {item.userId}</p>
-          <p>id: {item.id}</p>
-          <p>completed: {item.completed ? "Yes" : "No"}</p>
+      <div
+        className={`grid transition-all duration-300 ease-in-out ${
+          isExpanded
+            ? "grid-rows-[1fr] opacity-100 mt-4"
+            : "grid-rows-[0fr] opacity-0"
+        }`}
+      >
+        <div className="overflow-hidden">
+          <div className="space-y-2 text-gray-600">
+            <p>userId: {item.userId}</p>
+            <p>id: {item.id}</p>
+            <p>completed: {item.completed ? "Yes" : "No"}</p>
+          </div>
         </div>
-      )}
+      </div>
     </div>
   );
 };
